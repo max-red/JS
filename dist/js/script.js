@@ -1,21 +1,68 @@
 'use strict';
 
-const numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '20');
+let numberOfFilms;
+
+function start() {
+    numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+
+    while (numberOfFilms == null || 
+        numberOfFilms == '' || isNaN(numberOfFilms)) {
+        numberOfFilms = prompt('Сколько фильмов вы уже посмотрели?', '');
+    }
+}
+
+start();
 
 const personalMovieDB = {
-    count: numberOfFilms,
+    count: +numberOfFilms,
     movies: {},
     actors: {},
     genres: [],
     privat: false
 };
 
-const a = prompt('Один из последних просмотренных фильмов?', 'Девчата'),
-      b = prompt('На сколько оцените его?', '7'),
-      c = prompt('Один из последних просмотренных фильмов?', 'Кин-дза-дза'),
-      d = prompt('На сколько оцените его?', '9');
+function rememberMyFilms() {
+    for (let i = 0; i < 2; i++) {
+        let a = '',
+            b = '';
+        while (a == null || a == '' || a.length > 30) {
+            a = prompt('Один из последних просмотренных фильмов?', '');
+        }
+        while (b == null || b == '' || b.length > 30 || isNaN(b)) {
+            b = prompt('На сколько оцените его?', '');
+        }
+        personalMovieDB.movies[a] = +b;
+    }
+}
 
-personalMovieDB.movies[a] = b;
-personalMovieDB.movies[c] = d;
+rememberMyFilms();
 
-console.log(personalMovieDB);
+function detectPersonalLevel() {
+    if (personalMovieDB.count < 10) {
+        alert('Просмотрено довольно мало фильмов');
+    } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+        alert('Вы классический зритель');
+    } else if (personalMovieDB.count > 30) {
+        alert('Вы киноман');
+    } else {
+        alert('Произошла ошибка');
+    }
+}
+
+detectPersonalLevel();
+
+function showMyDB(hidden) {
+    if(!hidden) {
+        console.log(personalMovieDB);
+    }
+}
+
+showMyDB(personalMovieDB.privat);
+
+function writeYourGenres(genre) {
+    for(let i = 1; i <= 3; i++) {
+        genre[i - 1] = prompt(`Ваш любимый жанр под номером ${i}`, '');
+    }
+}
+
+writeYourGenres(personalMovieDB.genres);
